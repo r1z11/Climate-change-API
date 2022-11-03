@@ -1,8 +1,7 @@
-const PORT = 8000
+const PORT = process.env.PORT || 8000
 const express = require('express')
 const axios = require('axios')
 const cheerio = require('cheerio')
-const { response } = require('express')
 
 const app = express()
 
@@ -14,11 +13,11 @@ const newspapers = [
         address: 'https://www.cityam.com/london-must-become-a-world-leader-on-climate-change-action/',
         base: ''
     },
-    {
-        name: 'thetimes',
-        address: 'https://www.thetimes.co.uk/environment/climate-change',
-        base: ''
-    },
+    // {
+    //     name: 'thetimes',
+    //     address: 'https://www.thetimes.co.uk/environment/climate-change',
+    //     base: ''
+    // },
     {
         name: 'guardian',
         address: 'https://www.theguardian.com/environment/climate-crisis',
@@ -44,11 +43,11 @@ const newspapers = [
         address: 'https://www.smh.com.au/environment/climate-change',
         base: 'https://www.smh.com.au',
     },
-    {
-        name: 'un',
-        address: 'https://www.un.org/climatechange',
-        base: '',
-    },
+    // {
+    //     name: 'un',
+    //     address: 'https://www.un.org/climatechange',
+    //     base: '',
+    // },
     {
         name: 'bbc',
         address: 'https://www.bbc.co.uk/news/science_and_environment',
@@ -91,7 +90,7 @@ newspapers.forEach(newspaper => {
                     source: newspaper.name
                 })
             })
-        })
+        }).catch(err => console.log(err))
 })
 
 // Home page
@@ -104,8 +103,8 @@ app.get('/news', (req, res) => {
     res.json(articles)
 })
 
-// Get newspaper
-app.get('/news/:newspaperId', async (req, res) => {
+// Get newspaper articles
+app.get('/news/:newspaperId', (req, res) => {
     const newspaperId = req.params.newspaperId
 
     const newspaperAddress = newspapers.filter(newspaper => newspaper.name == newspaperId)[0].address
